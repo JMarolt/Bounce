@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import Map.Border;
 import Player.Player;
 
 public class Main implements ActionListener, KeyListener{
@@ -21,13 +22,12 @@ public class Main implements ActionListener, KeyListener{
 	private Timer timer;
 	public static State currentState = State.GAME;
 	//other variables
-	static int px = 500;
-	static int py = 500;
+	static int px = width/2;
+	static int py = height/2;
 	static int pw = 50;
 	static int ph = 50;
 	public static Player player = new Player(px, py, pw, ph);
-	boolean left = false;
-	boolean right = false;
+	public static Border borders = new Border(0, 0, 1920, 2);
 	boolean jump = false;     
 	
 	public Main() {
@@ -48,7 +48,6 @@ public class Main implements ActionListener, KeyListener{
 		f.pack();
 		f.setVisible(true);
 		timer = new Timer(1000/60, this);
-		timer.start();
 	}
 	
 	public void addToFrame() {
@@ -63,9 +62,14 @@ public class Main implements ActionListener, KeyListener{
 		p = new Panel();
 	}
 	
+	public void start() {
+		timer.start();
+	}
+	
 	public static void main(String[] args) {
 		Main main = new Main();
 		main.makeFrame();
+		main.start();
 	}
 
 	@Override
@@ -76,8 +80,13 @@ public class Main implements ActionListener, KeyListener{
 			player.jump();
 			jump = false;
 		}
-	}
+		if(player.collision().intersects(borders.collision()) || player.collision().intersects(borders.tcollision())) {
+			player.die();
+			currentState = State.DEAD;
 
+		}
+	}
+ 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		
@@ -88,6 +97,8 @@ public class Main implements ActionListener, KeyListener{
 		if(e.getKeyCode() == 32) {
 			jump = true;
 		}
+		
+		
 	}
 
 	@Override

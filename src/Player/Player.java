@@ -2,6 +2,7 @@ package Player;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import Setup.Direction;
 import Setup.Main;
@@ -35,9 +36,6 @@ public class Player {
 		if(x >= (Main.width - width)) {
 			direction = Direction.LEFT;
 		}
-		if(y <= 0 || y >= 1080) {
-			die();
-		}
 	}
 	
 	public void jump() {
@@ -45,11 +43,10 @@ public class Player {
 	}
 	
 	public void die() {
-		
-	}
-	
-	public void respawn() {
-		
+		x = Main.width/2 - (width/2);
+		y = Main.height/2 - (height/2);
+		velocity = 0;
+		direction = Direction.LEFT;
 	}
 	
 	public void moveLeft() {
@@ -67,6 +64,10 @@ public class Player {
 	public void draw(Graphics g) {
 		g.setColor(Color.pink);
 		g.fillRect(x, y, width, height);
+	}
+	
+	public Rectangle collision() {
+		return new Rectangle(getX(), getY(), getWidth(), getHeight());
 	}
 
 	public int getX() {
