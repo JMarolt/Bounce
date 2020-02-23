@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import Map.Border;
+import Map.Sides;
 import Player.Player;
 
 public class Main implements ActionListener, KeyListener{
@@ -20,14 +21,15 @@ public class Main implements ActionListener, KeyListener{
 	private JFrame f;
 	private Panel p;
 	private Timer timer;
-	public static State currentState = State.GAME;
+	public static State currentState = State.MENU;
 	//other variables
-	static int px = width/2;
-	static int py = height/2;
 	static int pw = 50;
 	static int ph = 50;
+	static int px = (width/2) - (pw/2);
+	static int py = (height/2) - (ph/2);
 	public static Player player = new Player(px, py, pw, ph);
 	public static Border borders = new Border(0, 0, 1920, 2);
+	public static Sides sides = new Sides(-30, 0, 1910, 0, 40, 1920);
 	boolean jump = false;     
 	
 	public Main() {
@@ -83,8 +85,9 @@ public class Main implements ActionListener, KeyListener{
 		if(player.collision().intersects(borders.collision()) || player.collision().intersects(borders.tcollision())) {
 			player.die();
 			currentState = State.DEAD;
-
+			sides.setAmount(sides.getAmount() + 1);
 		}
+		System.out.println(sides.getAmount());
 	}
  
 	@Override
@@ -97,8 +100,12 @@ public class Main implements ActionListener, KeyListener{
 		if(e.getKeyCode() == 32) {
 			jump = true;
 		}
-		
-		
+		if(e.getKeyCode() == 32 && currentState == State.DEAD) {
+			currentState = State.GAME;
+		}
+		if(e.getKeyCode() == 32 && currentState == State.MENU) {
+			currentState = State.GAME;
+		}
 	}
 
 	@Override

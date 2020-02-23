@@ -17,6 +17,7 @@ public class Panel extends JPanel{
 	
 	public void paintComponent(Graphics g) {
 		if(Main.currentState == State.MENU) {
+			loadTheBadSwingFont(g);
 			displayMainMenu(g);
 		}
 		if(Main.currentState == State.GAME) {
@@ -37,14 +38,26 @@ public class Panel extends JPanel{
 		g.setColor(Color.black);
 		g.fillRect(0, 0, Main.width, Main.height);
 		Main.borders.draw(g);
+		Main.sides.draw(g);
+	}
+	
+	public void loadTheBadSwingFont(Graphics g) {
+		g.setColor(Color.black);
+		String load = "l";
+		g.drawString(load, 0, 0);
 	}
 	
 	public void displayDeathScreen(Graphics g) {
-		String text = "You're Dead AF";
+		g.setColor(Color.black);
+		g.fillRect(0, 0, Main.width, Main.height);
+		String text = "You're Dead";
+		String restart = "Press Space To Restart";
 		g.setFont(myFont);
-		//int w = g.getFontMetrics().stringWidth(text);
+		int w = g.getFontMetrics().stringWidth(text);
+		int wr = g.getFontMetrics().stringWidth(restart);
 		g.setColor(Color.white);
-		//g.drawString(text, (Main.width/2) - (2/2), Main.height/2);
+		g.drawString(text, (Main.width/2) - (w/2), Main.height/4 - 30);
+		g.drawString(restart, (Main.width/2) - (wr/2), Main.height/4 + 30);
 	}
 	
 }
